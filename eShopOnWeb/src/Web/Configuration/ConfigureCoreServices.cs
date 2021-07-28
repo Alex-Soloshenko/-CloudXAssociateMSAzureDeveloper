@@ -1,5 +1,7 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Services;
+using Microsoft.eShopWeb.Infrastructure;
 using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Logging;
 using Microsoft.eShopWeb.Infrastructure.Services;
@@ -19,6 +21,20 @@ namespace Microsoft.eShopWeb.Web.Configuration
             services.AddSingleton<IUriComposer>(new UriComposer(configuration.Get<CatalogSettings>()));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
+
+            var section = configuration.GetSection(nameof(AzureWarehouseServiceBusSettings));
+            var serviceBusSettings = section.Get<AzureWarehouseServiceBusSettings>();
+
+            services.AddSingleton<IServiceBusRepository>(_ => new ServiceBusRepository(serviceBusSettings));
+            services.AddSingleton<IWarehouseReservationService, WarehouseReservationWebService>();
+
+            var settings = configuration.Get<DeliveryStorageSettings>();
+            var secret = configuration.Get<DeliveryStorageSecretSettings>();
+            services.AddHttpClient<IDeliveryStorageService, DeliveryStorageWebService>(client =>
+            {
+                client.BaseAddress = new Uri(settings.DeliveryFunctionBaseUrl);
+                client.DefaultRequestHeaders.Add("x-functions-key", secret.FunctionKey);
+            });
 
             return services;
         }

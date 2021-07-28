@@ -22,6 +22,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
         private readonly IBasketService _basketService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IOrderService _orderService;
+        private readonly IWarehouseReservationService _warehouseReservationService;
+        private readonly IDeliveryStorageService _deliveryStorageService;
         private string _username = null;
         private readonly IBasketViewModelService _basketViewModelService;
         private readonly IAppLogger<CheckoutModel> _logger;
@@ -30,11 +32,15 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
             IBasketViewModelService basketViewModelService,
             SignInManager<ApplicationUser> signInManager,
             IOrderService orderService,
+            IWarehouseReservationService warehouseReservationService,
+            IDeliveryStorageService deliveryStorageService,
             IAppLogger<CheckoutModel> logger)
         {
             _basketService = basketService;
             _signInManager = signInManager;
             _orderService = orderService;
+            _warehouseReservationService = warehouseReservationService;
+            _deliveryStorageService = deliveryStorageService;
             _basketViewModelService = basketViewModelService;
             _logger = logger;
         }
@@ -59,7 +65,11 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
 
                 var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
                 await _basketService.SetQuantities(BasketModel.Id, updateModel);
-                await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
+                var order = await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
+
+                await _warehouseReservationService.ReserveOrderAsync(order);
+                await _deliveryStorageService.StoreOrderAsync(order);
+
                 await _basketService.DeleteBasketAsync(BasketModel.Id);               
             }
             catch (EmptyBasketOnCheckoutException emptyBasketOnCheckoutException)
