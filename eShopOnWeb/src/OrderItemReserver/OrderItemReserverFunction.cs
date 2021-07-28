@@ -22,7 +22,7 @@ namespace OrderItemReserver
         }
 
         [Function("Reserve")]
-        public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+        public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post")]
             HttpRequestData req, FunctionContext executionContext)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
@@ -32,7 +32,7 @@ namespace OrderItemReserver
 
             _logger.LogDebug($"Reserving order: {order}");
             await _warehouseReservationService.ReserveOrderAsync(order);
-            _logger.LogDebug("Reservation is successful");
+            _logger.LogDebug("Reservation is completed successfully");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");

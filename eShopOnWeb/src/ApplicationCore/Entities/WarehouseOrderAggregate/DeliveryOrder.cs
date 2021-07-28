@@ -4,28 +4,16 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.WarehouseOrderAggregate
 {
-    public class WarehouseOrder : BaseEntity
+    public class DeliveryOrder : BaseCosmosEntity
     {
         private static readonly Random Random = new();
         private readonly int _id = Random.Next();
 
-        public override int Id
-        {
-            get { return _id; }
-            protected set { }
-        }
+        public override string Id => _id.ToString();
 
         public Order Order { get; }
 
-        public string Name
-        {
-            get
-            {
-                return $"{Id}:{Order.Id}";
-            }
-        }
-
-        public WarehouseOrder(Order order)
+        public DeliveryOrder(Order order)
         {
             Guard.Against.Null(order, nameof(order));
 

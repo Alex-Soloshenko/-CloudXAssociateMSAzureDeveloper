@@ -1,23 +1,43 @@
+using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace DeliveryOrderProcessor
 {
-    public static class DeliveryOrderProcessorFunction
+    public class DeliveryOrderProcessorFunction
     {
-        [Function("Process")]
-        public static HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req,
-            FunctionContext executionContext)
+        private readonly ILogger<DeliveryOrderProcessorFunction> _logger;
+        private readonly IDeliveryStorageService _deliveryStorageService;
+
+        public DeliveryOrderProcessorFunction(ILogger<DeliveryOrderProcessorFunction> logger, IDeliveryStorageService deliveryStorageService)
         {
-            var logger = executionContext.GetLogger("Function1");
-            logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger = logger;
+            _deliveryStorageService = deliveryStorageService;
+        }
+
+        [Function("Process")]
+        public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post")]
+            HttpRequestData req, FunctionContext executionContext)
+        {
+            _logger.LogInformation("C# HTTP trigger function processed a request.");
+
+            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            var order = JsonConvert.DeserializeObject<Order>(requestBody);
+
+            _logger.LogDebug($"Storing order: {order}");
+            await _deliveryStorageService.StoreOrderAsync(order);
+            _logger.LogDebug("Order is stored successfully");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
 
-            response.WriteString("Welcome to Azure Functions!");
+            await response.WriteStringAsync($"Storing is successful! {order}");
 
             return response;
         }

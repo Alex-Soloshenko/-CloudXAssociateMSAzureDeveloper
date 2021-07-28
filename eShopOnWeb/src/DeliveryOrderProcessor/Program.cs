@@ -1,7 +1,5 @@
-using Microsoft.Azure.Functions.Worker.Configuration;
-using Microsoft.Extensions.Configuration;
+using DeliveryOrderProcessor.Configuration;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 
 namespace DeliveryOrderProcessor
 {
@@ -11,6 +9,7 @@ namespace DeliveryOrderProcessor
         {
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
+                .ConfigureServices((context, services) => { services.AddCoreServices(context.Configuration); })
                 .Build();
 
             host.Run();
