@@ -2,6 +2,7 @@
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 {
@@ -21,6 +22,15 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
             BuyerId = buyerId;
             ShipToAddress = shipToAddress;
             _orderItems = orderItems;
+        }
+
+        [JsonConstructor]
+        public Order(string buyerId, Address shipToAddress, List<OrderItem> orderItems, int id) 
+            : this(buyerId, shipToAddress, orderItems)
+        {
+            Guard.Against.NegativeOrZero(id, nameof(id));
+
+            Id = id;
         }
 
         public string BuyerId { get; private set; }
