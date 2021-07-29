@@ -1,0 +1,81 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "webhooks_eshoppublicapifinal080132_serviceUri": {
+            "value": null
+        },
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "value": null
+        },
+        "sites_WebFinal_name": {
+            "value": null
+        },
+        "connections_outlook_name": {
+            "value": null
+        },
+        "servers_cloud_x_final_name": {
+            "value": null
+        },
+        "connections_office365_name": {
+            "value": null
+        },
+        "serverfarms_ApiFinalPlan_name": {
+            "value": null
+        },
+        "serverfarms_WebFinalPlan_name": {
+            "value": null
+        },
+        "sites_WebAppAnotherRegion_name": {
+            "value": null
+        },
+        "sites_eshoppublicapi_final_name": {
+            "value": null
+        },
+        "components_CloudXFinal_name": {
+            "value": null
+        },
+        "sites_OrderItemReserverFinal_name": {
+            "value": null
+        },
+        "serverfarms_LogicAppFinalPlan_name": {
+            "value": null
+        },
+        "databaseAccounts_solosh_name": {
+            "value": null
+        },
+        "namespaces_ServiceBusFinal_name": {
+            "value": null
+        },
+        "sites_DeliveryOrderProcessorFinal_name": {
+            "value": null
+        },
+        "serverfarms_WebAppAnotherRegionPlan_name": {
+            "value": null
+        },
+        "sites_CloudXReservationProcessFinal_name": {
+            "value": null
+        },
+        "storageAccounts_cloudfinalstorage_name": {
+            "value": null
+        },
+        "trafficManagerProfiles_CloudX_Final_name": {
+            "value": null
+        },
+        "serverfarms_ASP_CloudXAssociateMSAzureDeveloper_8f25_name": {
+            "value": null
+        },
+        "serverfarms_ASP_CloudXAssociateMSAzureDeveloper_be42_name": {
+            "value": null
+        },
+        "registries_CloudXFinalContainerRegistry_name": {
+            "value": null
+        },
+        "smartdetectoralertrules_failure_anomalies___cloudxfinal_name": {
+            "value": null
+        },
+        "actiongroups_application_insights_smart_detection_externalid": {
+            "value": null
+        }
+    }
+}
