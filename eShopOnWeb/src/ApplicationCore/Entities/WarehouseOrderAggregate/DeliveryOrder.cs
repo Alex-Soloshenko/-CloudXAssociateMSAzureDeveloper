@@ -11,6 +11,13 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.WarehouseOrderAggregate
 
         public override string Id => _id.ToString();
 
+        public override string PartitionKey
+        {
+            get => Id;
+            set { }
+        }
+
+
         public Order Order { get; }
 
         public DeliveryOrder(Order order)

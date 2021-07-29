@@ -7,6 +7,6 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         public virtual string Id { get; protected set; }
 
         [JsonProperty(PropertyName = "partitionKey")]
-        public string PartitionKey { get; set; }
+        public virtual string PartitionKey { get; set; }
     }
 }
